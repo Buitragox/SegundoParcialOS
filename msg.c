@@ -13,7 +13,8 @@ void error_exit(int msg_id, sqlite3* db){
 }
 
 
-void msg_receiver(int msg_id){
+void* msg_receiver(void* arg){
+    int msg_id = atoi(arg);
     msgtime horarios;
     long int msgtype;
     FILE* f;
@@ -67,18 +68,23 @@ void msg_receiver(int msg_id){
     }
 }
 
-void msg_sender(int msg_id, int conn_fd){
-    msgtime horarios;
+void* msg_sender(void *arg){
+    sender_args *param = (sender_args *) arg;
+    msgtime horarios; 
     time(&horarios.start_time);
-    request_handle(conn_fd);
-    close_or_die(conn_fd);
+
+    request_handle(param->conn_fd);
+
+    //printf("HANDLE %d\n", param->conn_fd);
+    close_or_die(param->conn_fd);
+    printf("Closed connection %d\n", param->conn_fd);
     time(&horarios.end_time);
-    int msg_rc = msgsnd(msg_id, (void *)&horarios, sizeof(msgtime), 0);
+    int msg_rc = msgsnd(param->msg_id, (void *)&horarios, sizeof(msgtime), 0);
     if(msg_rc == -1) {
         printf("msgsnd fail\n");
         exit(-1);
     }
     //Mensajes debug
-    printf("hijo %d ,,, padre %d\n", getpid(), getppid());
-    exit(0);
+    printf("thread %ld\n", pthread_self());
+    pthread_exit(0);
 }
