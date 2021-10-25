@@ -69,17 +69,17 @@ void* msg_receiver(void* arg){
 }
 
 void* msg_sender(void *arg){
-    sender_args *param = (sender_args *) arg;
-    msgtime horarios; 
+    sender_args param = *((sender_args *) arg);
+    msgtime horarios;
     time(&horarios.start_time);
 
-    request_handle(param->conn_fd);
+    request_handle(param.conn_fd);
 
     //printf("HANDLE %d\n", param->conn_fd);
-    close_or_die(param->conn_fd);
-    printf("Closed connection %d\n", param->conn_fd);
+    close_or_die(param.conn_fd);
+    //printf("Closed connection %d\n", param->conn_fd);
     time(&horarios.end_time);
-    int msg_rc = msgsnd(param->msg_id, (void *)&horarios, sizeof(msgtime), 0);
+    int msg_rc = msgsnd(param.msg_id, (void *)&horarios, sizeof(msgtime), 0);
     if(msg_rc == -1) {
         printf("msgsnd fail\n");
         exit(-1);
