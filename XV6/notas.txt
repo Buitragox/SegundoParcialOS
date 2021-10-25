@@ -1,0 +1,5 @@
+proc.h 53, agregar uint ctime
+
+proc.c userinit 134, agregar p->ctime
+
+proc.c wait 300, agregar p->ctime = 0; //Reiniciar el tiempo

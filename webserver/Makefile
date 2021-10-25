@@ -5,7 +5,7 @@
 CC = gcc
 CFLAGS = -Wall
 LIB = -lpthread -ldl
-OBJS = wserver.o wclient.o request.o io_helper.o sqlite3.o msg.o
+OBJS = wserver.o wclient.o request.o io_helper.o msg.o
 SQ = sqlite3
 
 .SUFFIXES: .c .o 
